@@ -10,7 +10,7 @@ if (TRUE) {
   list.of.packages <- c("tidyverse", "haven", "here", "kableExtra","rstudioapi",
                         "DescTools","qwraps2","data.table","stargazer","readxl","dplyr",
                         "rootSolve","sp","raster","rgdal","leaflet","wesanderson","plotKML",
-                        "mapview")
+                        "mapview", "maps")
   new.packages <- list.of.packages[
     !( list.of.packages %in% installed.packages()[,"Package"] )
   ]
@@ -51,7 +51,7 @@ vis_country <- c("AU","BE","BN","CA","FR","GB","GU","IN","IT","KE",
 fri_country <- c("AE","AF","AL","AU","BN","BR","CN","CO","CV","DK","ES",
                  "FR","HK","IN","IT","KE","KP","KR","MM","MX","PE","PH",
                  "PK","PR","SA","SV","TH","TW","UG","US","USA","VN","HT",
-                 "NL","ET")
+                 "NL","ET", "PT")
 
 # Subset countries
 biz <- wldmap[wldmap@data$ISO %in% biz_country,]
@@ -112,7 +112,7 @@ fri_country <- c("Afghanistan","Albania","Australia","Brazil","Brunei",
                  "South Korea","Saudi Arabia","Mexico","Myanmar",
                  "Pakistan","Peru","Philippines","Puerto Rico",
                  "North Korea","El Salvador","Thailand","Taiwan","Uganda",
-                 "USA","United Arab Emirates","Vietnam")
+                 "USA","United Arab Emirates","Vietnam", "Portugal")
 
 
 # Remove the Antarctica region
