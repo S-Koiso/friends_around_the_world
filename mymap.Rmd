@@ -20,7 +20,7 @@ if (TRUE) {
   lapply(list.of.packages, library, character.only = TRUE)
 }
 
-# setwd(dirname(getActiveDocumentContext()$path))
+setwd(dirname(getActiveDocumentContext()$path))
 
 knitr::opts_knit$set(root.dir = here())
 knitr::opts_chunk$set(echo = T, eval = T, message = F, warning = F, fig.pos = "H", fig.height = 6, fig.width = 12)
