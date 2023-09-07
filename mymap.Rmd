@@ -41,17 +41,17 @@ wldmap <- wldmap[wldmap@data$ISO!="AQ",]
 ## Countries where I have had professional relationships
 biz_country <- c("AU","BD","BF","CA","CL","CN","CY","DE","EG","FR","GB",
                  "IL","IN","KE","KH","KR","LK","MN","MX","NG","PL","RU",
-                 "SG","US","ZW")
+                 "SG","US","ZW","TR")
 
 ## Countries I visited
 vis_country <- c("AU","BE","BN","CA","FR","GB","GU","IN","IT","KE",
-                 "KH","KR","MX","NL","NZ","PH","SG","TH","TW","US","VN")
+                 "KH","KR","MX","NL","NZ","PH","SG","TH","TW","US","VN","DE")
 
 ## Countries my friends come from
 fri_country <- c("AE","AF","AL","AU","BN","BR","CN","CO","CV","DK","ES",
                  "FR","HK","IN","IT","KE","KP","KR","MM","MX","PE","PH",
                  "PK","PR","SA","SV","TH","TW","UG","US","USA","VN","HT",
-                 "NL","ET", "PT","AZ","BD","SN")
+                 "NL","ET", "PT","AZ","BD","SN","MA","HU","ID","KH")
 
 # Subset countries
 biz <- wldmap[wldmap@data$ISO %in% biz_country,]
