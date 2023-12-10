@@ -1,0 +1,76 @@
+---
+title: "My Map in the US"
+author: ""
+date: "`r format(Sys.time(), '%m/%d/%Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+if (TRUE) {
+  list.of.packages <- c("tidyverse", "haven", "here", "kableExtra","rstudioapi",
+                        "DescTools","qwraps2","data.table","stargazer","readxl","dplyr",
+                        "rootSolve","sp","sf","raster","terra","leaflet","wesanderson",
+                        "mapview", "maps")
+  new.packages <- list.of.packages[
+    !( list.of.packages %in% installed.packages()[,"Package"] )
+  ]
+  if(length(new.packages)) install.packages(new.packages,
+                                            repos = "https://cloud.r-project.org")
+  
+  lapply(list.of.packages, library, character.only = TRUE)
+}
+
+setwd(dirname(getActiveDocumentContext()$path))
+
+knitr::opts_knit$set(root.dir = here())
+knitr::opts_chunk$set(echo = T, eval = T, message = F, warning = F, fig.pos = "H", fig.height = 6, fig.width = 12)
+
+```
+
+# Map in Leaflet
+
+
+```{r, include=FALSE}
+# Get map data
+basemap <- leaflet() |> addProviderTiles("CartoDB.Positron")
+usmap <- st_read(dsn = "./US_States", layer = "USStates") # downloaded Esri ArcGIS Hub (https://hub.arcgis.com/datasets/utah::us-states/about)
+
+## States where I have had professional relationships
+biz_state <- NA
+
+## States I visited
+vis_state <- c("AZ","CA","CO","DC","HI","LA","MA","NV","NM","NY","OK","TX")
+
+## States my friends come from
+fri_state <- NA
+
+# Subset countries
+biz <- usmap[usmap$STATE_ABBR %in% biz_state,]
+vis <- usmap[usmap$STATE_ABBR %in% vis_state,]
+fri <- usmap[usmap$STATE_ABBR %in% fri_state,]
+```
+
+Show a map
+
+```{r}
+basemap %>%
+  # Friends - Red
+  # Business - Blue
+  # Visit - Orange
+  addPolygons(data=biz, color = "blue",
+              weight = 1, fillOpacity = 0.3,
+              group = "Business",
+              popup = paste("<p>", biz$STATE_NAME,"<p>")) %>%
+  addPolygons(data=vis, color = "orange",
+              weight = 1, fillOpacity = 0.3,
+              group = "Visited",
+              popup = paste("<p>", vis$STATE_NAME,"<p>")) %>%
+  addPolygons(data=fri, color = "red",
+              weight = 1, fillOpacity = 0.3,
+              group = "Friends",
+              popup = paste("<p>", fri$STATE_NAME,"<p>")) %>%
+  addLayersControl(overlayGroups = c("Friends","Visited","Business"))
+  
+```
+
+

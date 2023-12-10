@@ -9,7 +9,7 @@ output: html_document
 if (TRUE) {
   list.of.packages <- c("tidyverse", "haven", "here", "kableExtra","rstudioapi",
                         "DescTools","qwraps2","data.table","stargazer","readxl","dplyr",
-                        "rootSolve","sp","raster","rgdal","leaflet","wesanderson",
+                        "rootSolve","sp","sf","raster","terra","leaflet","wesanderson",
                         "mapview", "maps")
   new.packages <- list.of.packages[
     !( list.of.packages %in% installed.packages()[,"Package"] )
@@ -33,10 +33,12 @@ knitr::opts_chunk$set(echo = T, eval = T, message = F, warning = F, fig.pos = "H
 ```{r, include=FALSE}
 # Get map data
 basemap <- leaflet() %>% addProviderTiles("CartoDB.Positron")
-wldmap <- rgdal::readOGR(dsn = "./World_Countries__Generalized_", layer = "World_Countries__Generalized_", encoding = "UTF-8") # downloaded Esri ArcGIS Hub (https://hub.arcgis.com/datasets/esri::world-countries-generalized/about)
+wldmap <- st_read(dsn = "./World_Countries__Generalized_", layer = "World_Countries__Generalized_")
+# For the previous R versions
+# wldmap <- rgdal::readOGR(dsn = "./World_Countries__Generalized_", layer = "World_Countries__Generalized_", encoding = "UTF-8") # downloaded Esri ArcGIS Hub (https://hub.arcgis.com/datasets/esri::world-countries-generalized/about)
 
 # Remove Antarctica
-wldmap <- wldmap[wldmap@data$ISO!="AQ",]
+wldmap <- wldmap[wldmap$ISO!="AQ",]
 
 ## Countries where I have had professional relationships
 biz_country <- c("AU","BD","BF","CA","CL","CN","CY","DE","EG","FR","GB",
@@ -54,10 +56,10 @@ fri_country <- c("AE","AF","AL","AU","BN","BR","CN","CO","CV","DK","ES",
                  "NL","ET", "PT","AZ","BD","SN","MA","HU","ID","KH")
 
 # Subset countries
-biz <- wldmap[wldmap@data$ISO %in% biz_country,]
-vis <- wldmap[wldmap@data$ISO %in% vis_country,]
-fri <- wldmap[wldmap@data$ISO %in% fri_country,]
-hom <- wldmap[wldmap@data$ISO == "JP",]
+biz <- wldmap[wldmap$ISO %in% biz_country,]
+vis <- wldmap[wldmap$ISO %in% vis_country,]
+fri <- wldmap[wldmap$ISO %in% fri_country,]
+hom <- wldmap[wldmap$ISO == "JP",]
 ```
 
 Show a map
@@ -71,19 +73,19 @@ basemap %>%
   addPolygons(data=hom, color = "black",
               weight = 1, fillOpacity = 0.3,
               group = "Home",
-              popup = paste("<p>", hom@data$COUNTRY,"<p>")) %>%
+              popup = paste("<p>", hom$COUNTRY,"<p>")) %>%
   addPolygons(data=biz, color = "blue",
               weight = 1, fillOpacity = 0.3,
               group = "Business",
-              popup = paste("<p>", biz@data$COUNTRY,"<p>")) %>%
+              popup = paste("<p>", biz$COUNTRY,"<p>")) %>%
   addPolygons(data=vis, color = "orange",
               weight = 1, fillOpacity = 0.3,
               group = "Visited",
-              popup = paste("<p>", vis@data$COUNTRY,"<p>")) %>%
+              popup = paste("<p>", vis$COUNTRY,"<p>")) %>%
   addPolygons(data=fri, color = "red",
               weight = 1, fillOpacity = 0.3,
               group = "Friends",
-              popup = paste("<p>", fri@data$COUNTRY,"<p>")) %>%
+              popup = paste("<p>", fri$COUNTRY,"<p>")) %>%
   addLayersControl(overlayGroups = c("Friends","Visited","Business"))
   
 ```
